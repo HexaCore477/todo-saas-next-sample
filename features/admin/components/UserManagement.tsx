@@ -73,10 +73,10 @@ export default function UserManagement() {
     <div className="bg-white dark:bg-slate-900 rounded-lg shadow-md overflow-hidden">
       <div className="p-6 border-b border-gray-200 dark:border-gray-700">
         <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-          User Management
+          Regular User Management
         </h3>
         <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-          Total Users: {users.length}
+          Total Regular Users: {users.length}
         </p>
       </div>
 

@@ -18,6 +18,7 @@ export async function getAllUsers(): Promise<UserData[]> {
   const { data: profiles, error } = await supabase
     .from("profiles")
     .select("id, full_name, role, created_at, updated_at")
+    .eq("role", "user")
     .order("created_at", { ascending: false });
 
   if (error) throw new Error(error.message);
