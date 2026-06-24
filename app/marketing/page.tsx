@@ -22,12 +22,6 @@ export default function MarketingPage() {
             >
               Get Started
             </Link>
-            <Link
-              href="/admin"
-              className="px-4 py-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition text-sm"
-            >
-              Admin
-            </Link>
           </div>
         </div>
       </nav>
