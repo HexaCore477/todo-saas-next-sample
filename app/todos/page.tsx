@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import TodoForm from "@/features/todos/components/TodoForm";
 import TodoList from "@/features/todos/components/TodoList";
 import TodoListManager from "@/features/todos/components/TodoListManager";
@@ -9,6 +10,7 @@ import Link from "next/link";
 import { getCurrentUserData } from "@/features/auth/services/authService";
 
 export default function TodosPage() {
+  const router = useRouter();
   const [selectedListId, setSelectedListId] = useState<string>();
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [isAdmin, setIsAdmin] = useState(false);
@@ -18,7 +20,13 @@ export default function TodosPage() {
     const checkUserRole = async () => {
       try {
         const user = await getCurrentUserData();
-        setIsAdmin(user?.role === "admin");
+        if (user?.role === "admin") {
+          // Redirect admin users to admin page
+          router.replace("/admin");
+          setIsAdmin(true);
+        } else {
+          setIsAdmin(false);
+        }
       } catch (error) {
         console.error("Failed to fetch user data:", error);
       } finally {
@@ -26,7 +34,7 @@ export default function TodosPage() {
       }
     };
     checkUserRole();
-  }, []);
+  }, [router]);
 
   const handleTodoCreated = () => {
     setRefreshTrigger((prev) => prev + 1);
