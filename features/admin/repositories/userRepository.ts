@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createClient, createAdminClient } from "@/lib/supabase/server";
 import { UserRole } from "@/features/auth/models/user";
 
 export interface UserData {
@@ -13,7 +13,8 @@ export interface UserData {
 }
 
 export async function getAllUsers(): Promise<UserData[]> {
-  const supabase = await createClient();
+  // Use admin client to bypass RLS and see all profiles
+  const supabase = await createAdminClient();
 
   // Fetch all profiles and filter in code to ensure visibility
   const { data: profiles, error } = await supabase
@@ -58,7 +59,7 @@ export async function getAllUsers(): Promise<UserData[]> {
 }
 
 export async function updateUserRole(userId: string, newRole: UserRole): Promise<void> {
-  const supabase = await createClient();
+  const supabase = await createAdminClient();
 
   const { error } = await supabase
     .from("profiles")
@@ -69,7 +70,7 @@ export async function updateUserRole(userId: string, newRole: UserRole): Promise
 }
 
 export async function deleteUser(userId: string): Promise<void> {
-  const supabase = await createClient();
+  const supabase = await createAdminClient();
 
   // Delete user's todos first (cascade should handle this)
   const { error: deleteError } = await supabase
@@ -81,7 +82,7 @@ export async function deleteUser(userId: string): Promise<void> {
 }
 
 export async function getUserStats(userId: string) {
-  const supabase = await createClient();
+  const supabase = await createAdminClient();
 
   // Get lists
   const { data: lists, error: listsError } = await supabase

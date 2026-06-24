@@ -25,3 +25,25 @@ export async function createClient() {
     }
   );
 }
+
+export async function createAdminClient() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+  const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!supabaseServiceKey) {
+    // Fallback to anon key if service key is not available
+    // In production, SUPABASE_SERVICE_ROLE_KEY must be set
+    return createClient();
+  }
+
+  return createServerClient(
+    supabaseUrl,
+    supabaseServiceKey,
+    {
+      cookies: {
+        getAll() { return []; },
+        setAll() { },
+      },
+    }
+  );
+}

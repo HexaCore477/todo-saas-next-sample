@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createClient, createAdminClient } from "@/lib/supabase/server";
 
 export interface AdminStats {
   totalUsers: number;
@@ -9,7 +9,7 @@ export interface AdminStats {
 }
 
 export async function getAdminStats(): Promise<AdminStats> {
-  const supabase = await createClient();
+  const supabase = await createAdminClient();
 
   // Get total users
   const { count: totalUsers } = await supabase
@@ -48,7 +48,7 @@ export async function getAdminStats(): Promise<AdminStats> {
 }
 
 export async function getRecentActivity() {
-  const supabase = await createClient();
+  const supabase = await createAdminClient();
 
   // Get recently created lists
   const { data: recentLists } = await supabase
