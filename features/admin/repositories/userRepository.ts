@@ -15,18 +15,21 @@ export interface UserData {
 export async function getAllUsers(): Promise<UserData[]> {
   const supabase = await createClient();
 
+  // Fetch all profiles and filter in code to ensure visibility
   const { data: profiles, error } = await supabase
     .from("profiles")
     .select("id, full_name, role, created_at, updated_at")
-    .eq("role", "user")
     .order("created_at", { ascending: false });
 
   if (error) throw new Error(error.message);
 
+  // Filter for 'user' role in memory
+  const filteredProfiles = (profiles || []).filter(p => p.role === "user");
+
   // Get user emails from auth
   const usersWithData: UserData[] = [];
 
-  for (const profile of profiles || []) {
+  for (const profile of filteredProfiles) {
     // Get list count
     const { count: listCount } = await supabase
       .from("todo_lists")
