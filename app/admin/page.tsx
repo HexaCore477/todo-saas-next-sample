@@ -9,12 +9,6 @@ import AdminProtected from "@/features/admin/components/AdminProtected";
 import Link from "next/link";
 
 export default function AdminPage() {
-  const [showApplicationLink, setShowApplicationLink] = useState(false);
-
-  useEffect(() => {
-    // Admin users should only see the admin section, not the Application link
-    setShowApplicationLink(false);
-  }, []);
   return (
     <AdminProtected>
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-900 dark:to-slate-800">
@@ -30,14 +24,6 @@ export default function AdminPage() {
               </p>
             </div>
             <div className="flex items-center space-x-6">
-              {showApplicationLink && (
-                <Link 
-                  href="/todos" 
-                  className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium"
-                >
-                  Application
-                </Link>
-              )}
               <LogoutButton />
             </div>
           </div>
