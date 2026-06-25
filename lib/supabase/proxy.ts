@@ -2,6 +2,7 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
 export async function updateSession(request: NextRequest) {
+  console.log(`👮 [Security Guard] Checking ID at the door for: ${request.nextUrl.pathname}`);
   let response = NextResponse.next({
     request: {
       headers: request.headers,

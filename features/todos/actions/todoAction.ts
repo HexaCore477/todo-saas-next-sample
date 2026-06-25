@@ -38,6 +38,7 @@ export async function deleteTodoListAction(listId: string) {
 // --- Todo Actions ---
 
 export async function createTodoAction(input: CreateTodoInput) {
+  console.log("🛠️ [Worker] Performing 'Create Todo' task (Server Action)");
   const user = await getCurrentUserData();
   if (!user) throw new Error("User not authenticated");
   
