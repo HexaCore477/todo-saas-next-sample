@@ -2,10 +2,17 @@
 
 import { login, signup, logout, getCurrentUserData } from "../services/authService";
 import { redirect } from "next/navigation";
+import { loginSchema, signupSchema } from "../schemas/authSchema";
 
 export async function loginAction(formData: FormData) {
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
+
+  // Validate input
+  const validation = loginSchema.safeParse({ email, password });
+  if (!validation.success) {
+    throw new Error(validation.error.errors[0].message);
+  }
 
   try {
     await login(email, password);
@@ -27,8 +34,10 @@ export async function signupAction(formData: FormData) {
   const password = formData.get("password") as string;
   const confirmPassword = formData.get("confirmPassword") as string;
 
-  if (password !== confirmPassword) {
-    throw new Error("Passwords do not match");
+  // Validate input
+  const validation = signupSchema.safeParse({ email, password, confirmPassword });
+  if (!validation.success) {
+    throw new Error(validation.error.errors[0].message);
   }
 
   try {

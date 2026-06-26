@@ -8,12 +8,19 @@ import {
   CreateTodoListInput 
 } from "../models/todo";
 import { revalidatePath } from "next/cache";
+import { todoListSchema, todoSchema, updateTodoSchema } from "../schemas/todoSchema";
 
 // --- Todo List Actions ---
 
 export async function createTodoListAction(input: CreateTodoListInput) {
   const user = await getCurrentUserData();
   if (!user) throw new Error("User not authenticated");
+
+  // Validate input
+  const validation = todoListSchema.safeParse(input);
+  if (!validation.success) {
+    throw new Error(validation.error.errors[0].message);
+  }
   
   const list = await service.createTodoListService(user.id, input);
   revalidatePath("/todos");
@@ -41,6 +48,12 @@ export async function createTodoAction(input: CreateTodoInput) {
   console.log("🛠️ [Worker] Performing 'Create Todo' task (Server Action)");
   const user = await getCurrentUserData();
   if (!user) throw new Error("User not authenticated");
+
+  // Validate input
+  const validation = todoSchema.safeParse(input);
+  if (!validation.success) {
+    throw new Error(validation.error.errors[0].message);
+  }
   
   const todo = await service.createTodoService(input);
   revalidatePath("/todos");
@@ -57,6 +70,12 @@ export async function getTodosByListAction(listId: string) {
 export async function updateTodoAction(todoId: string, input: UpdateTodoInput) {
   const user = await getCurrentUserData();
   if (!user) throw new Error("User not authenticated");
+
+  // Validate input
+  const validation = updateTodoSchema.safeParse(input);
+  if (!validation.success) {
+    throw new Error(validation.error.errors[0].message);
+  }
   
   const todo = await service.updateTodoService(todoId, input, user.id, user.role);
   revalidatePath("/todos");
