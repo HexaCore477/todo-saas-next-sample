@@ -4,7 +4,6 @@ import { getCurrentUserData } from "@/features/auth/services/authService";
 import * as service from "../services/userService";
 import { UserRole } from "@/features/auth/models/user";
 import { revalidatePath } from "next/cache";
-import { updateUserRoleSchema } from "../schemas/adminSchema";
 
 export async function getAllUsersAction() {
   const user = await getCurrentUserData();
@@ -19,12 +18,6 @@ export async function updateUserRoleAction(userId: string, newRole: UserRole) {
   const user = await getCurrentUserData();
   if (!user || user.role !== "admin") {
     throw new Error("Admin access required");
-  }
-
-  // Validate input
-  const validation = updateUserRoleSchema.safeParse({ userId, role: newRole });
-  if (!validation.success) {
-    throw new Error(validation.error.errors[0].message);
   }
 
   await service.updateUserRoleService(userId, newRole);
